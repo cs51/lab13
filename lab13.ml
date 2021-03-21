@@ -27,7 +27,7 @@ of lists. Below are examples of both:
       | [] -> 0
       | hd :: tl -> hd + sum tl ;;
 
-As noted in the book, the above functional recursive implementations
+As noted in the book, these functional recursive implementations
 may run into stack overflow errors when called on exceptionally long
 lists. 
 
@@ -62,8 +62,8 @@ tail-recursive form.
 ......................................................................
 Exercise 1: Tail-recursive sum 
 
-Rewrite the sum function to be tail recursive. (As usual, for this and
-succeeding exercises, you shouldn't feel beholden to how the
+Rewrite the `sum` function to be tail recursive. (As usual, for this
+and succeeding exercises, you shouldn't feel beholden to how the
 definition is introduced in the skeleton code below. For instance, you
 might want to add a `rec`, or use a different argument list, or no
 argument list at all but binding to an anonymous function instead.)
@@ -85,19 +85,22 @@ Exercise 2: Write a tail-recursive function `prods` that finds the
 product of the corresponding elements of two integer lists. Your
 function should raise a `Failure` exception when called on lists of
 differing length. You may remember implementing a similar function in
-Lab 2.
+Lab 2. It should work like this:
 
-Your initial tail-recursive function may output a list that is in
-reverse order of your expected output. This is a common outcome in
-tail-recursive list iteration functions. (In general, you'd want to
+   # prods [1; 2; 3] [1; 2; 3] ;;
+   -: int list = [1; 4; 9] 
+
+Your initial try at a tail-recursive function may output a list that
+is in reverse order of your expected output. This is a common outcome
+in tail-recursive list iteration functions. (In general, you'd want to
 consider whether or not this has negative outcomes on your intended
 use case. It may be that the output order is not significant.)
 
 In this case, for testing purposes, please preserve the initial
-ordering of the lists.
-
-   # prods [1; 2; 3] [1; 2; 3] ;;
-   -: int list = [1; 4; 9] 
+ordering of the lists. One method to do so is simply to reverse the
+list at the end, using a tail-recursive reversal function of
+course. Fortunately, the built-in `List.rev` is tail-recursive (even
+though the documentation doesn't mention that fact).
 ....................................................................*)
 
 let prods _ =
@@ -131,7 +134,8 @@ Part 2: Loops
 Another method of solving the problem of stack overflow when dealing
 with large lists is to use loops. Unlike tail recursion, loops rely on
 state change in order to function, and therefore go beyond the now
-familiar purely functional paradigm.
+familiar purely functional paradigm, bringing us into the domain of
+procedural programming.
 
 Let's get some practice with simple loops.
 
@@ -203,8 +207,10 @@ that your use cases will have on your design. *)
 (*....................................................................
 Exercise 8: You'll now reimplement one last familiar function:
 reversing a list. Write a non-recursive function `reverse` to reverse
-a list. (This function is implemented recursively in the `List` module
-as `List.rev`, and you've likely used it in previous exercises.)
+a list. (This function is implemented tail-recursively in the `List`
+module as `List.rev` (see
+https://github.com/ocaml/ocaml/blob/trunk/stdlib/list.ml), and you've
+likely used it in previous exercises.)
 ....................................................................*)
 
 let reverse (lst : 'a list) : 'a list =
@@ -219,10 +225,11 @@ lines of a given height as shown in the example below. See
 https://docs.cs50.net/2017/ap/problems/mario/less/mario.html.) *)
 
 (*....................................................................
-Exercise 9: Implement a function that prints out a half-pyramid of a
-specified height, per the below. Use hashes (#) for blocks. The
-function should raise an Invalid_argument exception for ints greater
-than 23. (Why? I don't know. That's just how CS50 did it.)
+Exercise 9: Implement a function in procedural style that prints out a
+half-pyramid of a specified height, per the below. Use hashes (#) for
+blocks. The function should raise an Invalid_argument exception for
+heights greater than 23. (Why? I don't know. That's just how CS50 did
+it.)
 
     # mario 5 ;;
         ##
